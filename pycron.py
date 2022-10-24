@@ -1,4 +1,4 @@
-from croniter import croniter # croniter.
+from croniter import croniter
 from datetime import datetime
 from crontab import CronTab
 import fileinput as files # fileinput - library, files - elios (тэг)
@@ -45,7 +45,7 @@ def cron_workflow(mainArr, tempArr, logger):
                 process = os.fork() # Ini a child process
                 if process == 0:
                     os.system(mainArr[index][5])
-                    logger.info(f"Виконання завдання: {mainArr[index][5]}")
+                    logger.info(f"Выполнение задания: {mainArr[index][5]}")
                     break
                 else:
                     tempArr[index] = croniter(f"{mainArr[index][0]} {mainArr[index][1]} {mainArr[index][2]} {mainArr[index][3]} {mainArr[index][4]}", datetime.now()).get_next(datetime)
@@ -56,15 +56,17 @@ def cron_workflow(mainArr, tempArr, logger):
                 continue
         else:
             index = 0
-            time.sleep(1) 
-    logger.info(f"Завершення процесу #{process}!")
+            time.sleep(1)
 
 def main():
-    dataArr = reading_tasks()
     logger = logger_ini()
-    print(dataArr)
-    logger.info("Log has been successfully created!")
-    logger.info(f"Commands we have: {len(dataArr)}\n")
+    logger.info("Программа запущена!")
+    dataArr = reading_tasks()
+    logger.info(f"crontab считан успешно! Найдено комманд: {len(dataArr)}\n") 
+    index = 0
+    while index < len(dataArr):
+        logger.debug(f"найденные задания: {dataArr[index]}")
+        index +=1
     temp = next_tick(dataArr)
     cron_workflow(dataArr, temp, logger)
 
